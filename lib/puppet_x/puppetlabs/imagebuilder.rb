@@ -219,7 +219,11 @@ module PuppetX
                      end
         when 'debian'
           codename = case @context[:os_version]
-                     when 'latest', 'stable', 'stable-slim', 'stable-backports', 'jessie', 'jessie-slim', 'jessie-backports', %r{^8}
+                     when 'latest', 'stable', 'stable-slim', 'stable-backports', 'buster', 'buster-slim', 'buster-backports', %r{^10}
+                       'buster'
+                     when 'oldstable', 'oldstable-slim', 'oldstable-backports', 'stretch', 'stretch-slim', 'stretch-backports', %r{^9}
+                       'stretch'
+                     when 'jessie', 'jessie-slim', 'jessie-backports', %r{^8}
                        'jessie'
                      when 'sid', 'sid-slim'
                        'sid'
@@ -286,8 +290,8 @@ module PuppetX
                                                               when 'ubuntu', 'debian'
                                                                 if puppet5
                                                                   [
-                                                                    'https://apt.puppetlabs.com/puppet5-release-"$CODENAME".deb',
-                                                                    'puppet5-release-"$CODENAME".deb'
+                                                                    'https://apt.puppetlabs.com/puppet6-release-"$CODENAME".deb',
+                                                                    'puppet6-release-"$CODENAME".deb'
                                                                   ]
                                                                 else
                                                                   [

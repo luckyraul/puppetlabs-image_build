@@ -8,7 +8,7 @@ module PuppetX
       attr_accessor :template
       def initialize(hash = nil, &block)
         basepath = File.dirname(File.dirname(File.dirname(File.dirname(__FILE__))))
-        @template = File.join(basepath, 'templates', '/Dockerfile.erb')
+        @template = File.join(basepath, 'templates', '/Dockerfile_slim.erb')
         super
       end
 

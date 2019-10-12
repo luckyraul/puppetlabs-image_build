@@ -22,12 +22,12 @@ module PuppetX
 
       option '--puppet-agent-version STRING' do
         summary 'Version of the Puppet Agent package to install'
-        default_to { '5.0.1' }
+        default_to { '6.10.0' }
       end
 
       option '--r10k-version STRING' do
         summary 'Version of R10k to use for installing modules from Puppetfile'
-        default_to { '2.5.5' }
+        default_to { '3.3.2' }
       end
 
       option '--r10k-yaml BOOLEAN' do
