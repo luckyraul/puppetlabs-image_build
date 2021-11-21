@@ -9,6 +9,11 @@ PuppetX::Puppetlabs::ImageBuilder::Face.define(:docker, '0.1.0') do
     default_to { false }
   end
 
+  option '--buildkit' do
+    summary 'Use Buildkit as the build tool'
+    default_to { false }
+  end
+
   action(:build) do
     summary 'Build a Docker image from Puppet code'
     arguments '[<manifest>]'
@@ -51,6 +56,14 @@ PuppetX::Puppetlabs::ImageBuilder::Face.define(:docker, '0.1.0') do
 
     option '--autosign-token STRING' do
       summary 'An authentication token used for autosigning master-built images'
+    end
+
+    option '--platform STRING' do
+      summary 'Docker buildx platform'
+    end
+
+    option '--output STRING' do
+      summary 'Docker buildx output'
     end
 
     option '--network STRING' do

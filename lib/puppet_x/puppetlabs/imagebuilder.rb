@@ -44,6 +44,7 @@ module PuppetX
       end
 
       def build
+        print build_command
         run(build_command)
       end
 
@@ -372,8 +373,14 @@ module PuppetX
         @context[:apt_proxy].nil? ? '' : "--build-arg APT_PROXY=#{@context[:apt_proxy]}"
       end
 
+      def buildx_string
+        ['platform', 'output'].map do |flag|
+          @context[flag.to_sym].nil? ? '' : "--#{flag.to_sym} #{@context[flag.to_sym]}"
+        end.join(' ')
+      end
+
       def command_build_args
-        "#{autosign_string} #{apt_proxy_string} #{http_proxy_string} #{https_proxy_string} #{string_args}"
+        "#{autosign_string} #{apt_proxy_string} #{http_proxy_string} #{https_proxy_string} #{string_args} #{buildx_string}"
       end
 
       def docker_network
@@ -382,7 +389,9 @@ module PuppetX
 
       def build_command
         dockerfile_path = build_file.save.path
-        if @context[:rocker]
+        if @context[:buildkit]
+          "docker buildx build #{command_build_args} -f #{dockerfile_path} ."
+        elsif @context[:rocker]
           "rocker build #{command_build_args} -f #{dockerfile_path} ."
         else
           "docker build #{command_build_args} #{docker_network} -t #{@context[:image_name]} -f #{dockerfile_path} ."
