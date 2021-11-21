@@ -219,17 +219,19 @@ module PuppetX
                      end
         when 'debian'
           codename = case @context[:os_version]
-                     when 'latest', 'stable', 'stable-slim', 'stable-backports', 'buster', 'buster-slim', 'buster-backports', %r{^10}
+                    when 'latest', 'stable', 'stable-slim', 'stable-backports', 'bullseye', 'bullseye-slim', 'bullseye-backports', %r{^11}
+                        'bullseye'
+                    when 'oldstable', 'oldstable-slim', 'oldstable-backports', 'buster', 'buster-slim', 'buster-backports', %r{^10}
                        'buster'
-                     when 'oldstable', 'oldstable-slim', 'oldstable-backports', 'stretch', 'stretch-slim', 'stretch-backports', %r{^9}
+                    when 'stretch', 'stretch-slim', 'stretch-backports', %r{^9}
                        'stretch'
-                     when 'jessie', 'jessie-slim', 'jessie-backports', %r{^8}
+                    when 'jessie', 'jessie-slim', 'jessie-backports', %r{^8}
                        'jessie'
-                     when 'sid', 'sid-slim'
+                    when 'sid', 'sid-slim'
                        'sid'
-                     when 'wheezy', %r{^7}
+                    when 'wheezy', %r{^7}
                        'wheezy'
-                     end
+                    end
         when 'alpine'
           facter_version = '2.4.6' # latest version available as a gem
           puppet_version = case @context[:puppet_agent_version]
