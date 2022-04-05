@@ -77,6 +77,11 @@ module PuppetX
         default_to { true }
       end
 
+      option '--[no-]slim' do
+        summary 'Enable or disable slim dockerfile'
+        default_to { true }
+      end
+
       option '--hiera-config STRING' do
         summary 'Hiera config file to use'
         default_to { 'hiera.yaml' }
