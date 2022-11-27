@@ -77,6 +77,11 @@ module PuppetX
         default_to { true }
       end
 
+      option '--[no-]native' do
+        summary 'Enable or disable native dockerfile'
+        default_to { false }
+      end
+
       option '--[no-]slim' do
         summary 'Enable or disable slim dockerfile'
         default_to { true }
