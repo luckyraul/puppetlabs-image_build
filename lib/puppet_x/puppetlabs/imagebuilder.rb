@@ -111,6 +111,7 @@ module PuppetX
 
       def host_config
         hostname = @context[:image_name].to_s.split('/').pop
+        hostname.sub!("-#{@context[:platform].sub('linux/','')}",'') if context.key? :platform
         host_config = find_metadata_file("#{hostname}.yaml")
         host_metadata = {}
         if @context[:image_name] && host_config
@@ -221,8 +222,9 @@ module PuppetX
         when 'debian'
           codename = case @context[:os_version]
                     # when 'latest', 'stable', 'stable-slim', 'stable-backports', 'bookworm', 'bookworm-slim', 'bookworm-backports', %r{^12}
-                        # 'bookworm'
-                    when 'latest', 'stable', 'stable-slim', 'stable-backports', 'bullseye', 'bullseye-slim', 'bullseye-backports', 'bookworm', 'bookworm-slim', 'bookworm-backports', %r{^11}
+                    when 'bookworm', 'bookworm-slim', 'bookworm-backports', %r{^12}
+                        'bookworm'
+                    when 'latest', 'stable', 'stable-slim', 'stable-backports', 'bullseye', 'bullseye-slim', 'bullseye-backports', %r{^11}
                         'bullseye'
                     when 'oldstable', 'oldstable-slim', 'oldstable-backports', 'buster', 'buster-slim', 'buster-backports', %r{^10}
                        'buster'
@@ -380,7 +382,7 @@ module PuppetX
           @context[flag.to_sym].nil? ? '' : "--#{flag.to_sym} #{@context[flag.to_sym]}"
         end
         result.push('--load') if context.key? :load
-        result.join(' ')
+        result.reject { |c| c.empty? }.join(' ')
       end
 
       def command_build_args
@@ -394,7 +396,9 @@ module PuppetX
       def build_command
         dockerfile_path = build_file.save.path
         if @context[:buildkit]
-          "docker buildx build #{command_build_args} -f #{dockerfile_path} ."
+           image_name = @context[:image_name].dup
+           image_name.concat("-#{@context[:platform].sub('linux/','')}") if context.key? :platform
+          "docker buildx build --progress=plain #{command_build_args} -t #{image_name} -f #{dockerfile_path} ."
         elsif @context[:rocker]
           "rocker build #{command_build_args} -f #{dockerfile_path} ."
         else
