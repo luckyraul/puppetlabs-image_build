@@ -376,9 +376,11 @@ module PuppetX
       end
 
       def buildx_string
-        ['platform', 'output'].map do |flag|
+        result = ['platform', 'output'].map do |flag|
           @context[flag.to_sym].nil? ? '' : "--#{flag.to_sym} #{@context[flag.to_sym]}"
-        end.join(' ')
+        end
+        result.push('--load') if context.key? :load
+        result.join(' ')
       end
 
       def command_build_args

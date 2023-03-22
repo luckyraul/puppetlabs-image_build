@@ -62,6 +62,10 @@ PuppetX::Puppetlabs::ImageBuilder::Face.define(:docker, '0.1.0') do
       summary 'Docker buildx platform'
     end
 
+    option '--load' do
+      summary 'Docker buildx load'
+    end
+
     option '--output STRING' do
       summary 'Docker buildx output'
     end
