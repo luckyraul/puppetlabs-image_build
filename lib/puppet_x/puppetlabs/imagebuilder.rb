@@ -292,13 +292,13 @@ module PuppetX
       end
 
       def determine_repository_details
-        puppet5 = @context[:puppet_agent_version].to_f >= 5 ? true : false
+        modern_puppet = @context[:puppet_agent_version].to_i >= 5 ? true : false
         @context[:package_address], @context[:package_name] = case @context[:os]
                                                               when 'ubuntu', 'debian'
-                                                                if puppet5
+                                                                if modern_puppet
                                                                   [
-                                                                    'https://apt.puppetlabs.com/puppet6-release-"$CODENAME".deb',
-                                                                    'puppet6-release-"$CODENAME".deb'
+                                                                    "https://apt.puppetlabs.com/puppet#{@context[:puppet_agent_version].to_i}-release-#{@context[:environment][:codename]}.deb",
+                                                                    "puppet#{@context[:puppet_agent_version].to_i}-release-#{@context[:environment][:codename]}.deb"
                                                                   ]
                                                                 else
                                                                   [
@@ -307,8 +307,8 @@ module PuppetX
                                                                   ]
                                                                 end
                                                               when 'centos'
-                                                                if puppet5
-                                                                  "https://yum.puppetlabs.com/puppet5/puppet5-release-el-#{@context[:os_version]}.noarch.rpm"
+                                                                if modern_puppet
+                                                                  "https://yum.puppetlabs.com/puppet#{@context[:puppet_agent_version].to_i}/puppet#{@context[:puppet_agent_version].to_i}-release-el-#{@context[:os_version]}.noarch.rpm"
                                                                 else
                                                                   "https://yum.puppetlabs.com/puppetlabs-release-pc1-el-#{@context[:os_version]}.noarch.rpm"
                                                                 end

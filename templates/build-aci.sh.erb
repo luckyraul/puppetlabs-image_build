@@ -65,18 +65,18 @@ acbuild run -- rm /usr/lib/ruby/gems/2.3.0/gems/facter-"$FACTER_VERSION"/lib/fac
 <% if os == 'ubuntu' or os == 'debian' %>
 acbuild run -- apt-get update
 acbuild run -- apt-get install -y git-core
-acbuild run -- <%= gem_path %> install r10k:"$R10K_VERSION" --no-ri --no-rdoc
+acbuild run -- <%= gem_path %> install r10k:"$R10K_VERSION" --no-document
 acbuild run -- apt-get clean
 acbuild run -- rm -rf /var/lib/apt/lists/*
 <% elsif os == 'centos' %>
 acbuild run -- yum update -y
 acbuild run -- yum install -y git
-acbuild run -- <%= gem_path %> install r10k:"$R10K_VERSION" --no-ri --no-rdoc
+acbuild run -- <%= gem_path %> install r10k:"$R10K_VERSION" --no-document
 acbuild run -- yum clean all
 <% elsif os == 'alpine' %>
 acbuild run -- apt-get update
 acbuild run -- apk add --update git
-acbuild run -- <%= gem_path %> install r10k:"$R10K_VERSION" --no-ri --no-rdoc
+acbuild run -- <%= gem_path %> install r10k:"$R10K_VERSION" --no-document
 acbuild run -- rm -rf /var/cache/apk/*
 <% end %>
 acbuild --debug copy <%= puppetfile %> /Puppetfile
