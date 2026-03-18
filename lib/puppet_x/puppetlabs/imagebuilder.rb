@@ -222,6 +222,8 @@ module PuppetX
         when 'debian'
           codename = case @context[:os_version]
                     # when 'latest', 'stable', 'stable-slim', 'stable-backports', 'bookworm', 'bookworm-slim', 'bookworm-backports', %r{^12}
+                    when 'trixie', 'trixie-slim', 'trixie-backports', %r{^13}
+                        'bookworm'
                     when 'bookworm', 'bookworm-slim', 'bookworm-backports', %r{^12}
                         'bookworm'
                     when 'latest', 'stable', 'stable-slim', 'stable-backports', 'bullseye', 'bullseye-slim', 'bullseye-backports', %r{^11}
