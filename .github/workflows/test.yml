@@ -1,0 +1,70 @@
+
+name: Test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: OpenVox ${{ matrix.openvox }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-24.04
+          - ubuntu-26.04
+        openvox:
+          - "8"
+          - "9"
+    steps:
+      - name: Checkout custom module
+        uses: actions/checkout@v7
+        with:
+          path: modules/imagebuild
+
+      - name: Install OpenVox Agent
+        shell: bash
+        run: |
+          set -euxo pipefail
+
+          UBUNTU_VERSION="$(lsb_release -rs)"
+          PACKAGE="openvox${{ matrix.openvox }}-release-ubuntu${UBUNTU_VERSION}.deb"
+
+          curl -fsSLO "https://apt.voxpupuli.org/${PACKAGE}"
+          sudo dpkg -i "${PACKAGE}"
+          sudo apt-get -qq update
+          sudo apt-get install -qqy openvox-agent
+
+      - name: Show OpenVox version
+        run: |
+          /opt/puppetlabs/bin/puppet --version
+          /opt/puppetlabs/bin/facter --version
+      - name: Create example
+        run: |
+          mkdir -p metadata
+          cat <<'EOF' > metadata/metadata.yaml
+          base_image: debian:trixie-slim
+          command: /usr/bin/php -a
+          maintainer: xxx@xx.com
+          image_name: luckyraul/php
+          env:
+            - DEBIAN_FRONTEND=noninteractive
+            - TZ=UTC
+          EOF
+          mkdir -p manifests
+          touch manifests/init.pp
+      - name: Run Dockerfile test
+        run: | 
+          /opt/puppetlabs/bin/puppet docker dockerfile --image-name=xxx --modulepath=modules > Dockerfile
+          cat Dockerfile
+          docker build -t test1 .
+      - name: Run Docker build Test
+        run: |
+          /opt/puppetlabs/bin/puppet docker build --modulepath=modules
