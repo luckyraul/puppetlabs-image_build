@@ -1,3 +1,7 @@
+##2026-07-26 - Version 3.0.0
+
+* Build multiarch images with modern Docker
+
 ##2017-07-26 - Version 0.6.0
 
 * Adds the ability to specify a Docker network for the docker build

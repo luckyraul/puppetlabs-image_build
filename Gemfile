@@ -1,34 +1,26 @@
-source 'https://rubygems.org'
+source ENV['GEM_SOURCE'] || 'https://rubygems.org'
 
 group :test do
-  gem 'coveralls', require: false
-  gem 'metadata-json-lint'
-  gem 'puppet', ENV['PUPPET_GEM_VERSION'] || '~> 4'
-  gem 'puppetlabs_spec_helper'
-  gem 'rake'
-  gem 'rspec'
-  gem 'rubocop'
-  gem 'rubocop-rspec'
-  gem 'simplecov'
-  gem 'simplecov-console'
+  gem 'voxpupuli-test', '~> 14.0',  :require => false
+  gem 'puppet_metadata', '~> 6.1',  :require => false
 end
 
 group :development do
-  gem 'guard-rake'
-  gem 'listen', '<3.1'
-  gem 'maintainers'
-  gem 'pry'
-  gem 'puppet-blacksmith'
-  gem 'r10k'
-  gem 'rubycritic', require: false
-  gem 'travis'
-  gem 'travis-lint'
-  gem 'yard'
+  gem 'guard-rake',               :require => false
+  gem 'overcommit', '>= 0.39.1',  :require => false
+  gem 'modulesync',               :require => false
 end
 
-group :acceptance do
-  gem 'beaker', '~> 2.0'
-  gem 'beaker-puppet_install_helper'
-  gem 'beaker-rspec'
-  gem 'beaker_spec_helper'
+group :system_tests do
+  gem 'voxpupuli-acceptance', '~> 4.4',  :require => false
 end
+
+group :release do
+  gem 'voxpupuli-release', '~> 5.3',  :require => false
+end
+
+gem 'rake', :require => false
+
+gem 'openvox', ENV.fetch('OPENVOX_GEM_VERSION', [">= 7", "< 9"]), :require => false, :groups => [:test]
+
+# vim: syntax=ruby
